@@ -8,7 +8,8 @@ TEMPLATE = app
 release: TARGET = piclient
 debug: TARGET = piclientd
 
-DESTDIR = /home/steini/Develop/bin
+DESTDIR = $$(DEV_BIN)
+#/home/steini/Develop/bin
 
 release: BUILDDIR = build/release
 debug:   BUILDDIR = build/debug
@@ -29,12 +30,18 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
+LIBPATH = $$(DEV_LIBS)
+message(lib path: $$LIBPATH)
+
 if(debug){
-LIBS += -L"/home/steini/Develop/lib" -ltagsystemd
+LIBS += -L$$LIBPATH -ltagsystemd
 
 }
+else{
+LIBS += -L$$LIBPATH -ltagsystem
+}
 
-INCLUDEPATH += ../tagsystem
+INCLUDEPATH += ../../tagsystem
 
 
 SOURCES += main.cpp \

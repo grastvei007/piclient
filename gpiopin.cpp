@@ -107,3 +107,15 @@ void GpioPin::onPinValueChanged(int aValue)
     }
 
 }
+
+
+void GpioPin::onPinPwmClockValueChanged(int aValue)
+{
+
+}
+
+
+void GpioPin::onPinPwmRangeValueChanged(int aValue)
+{
+
+}
