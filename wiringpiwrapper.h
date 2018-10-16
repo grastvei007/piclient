@@ -25,6 +25,10 @@ public:
     static void wiringPiSetup();
     static void pinMode(int aPin, PinDir aDir);
     static void digitalWrite(int aPin, Value aVal);
+    static int softPwmCreate(int aPin, int aInitVal, int aPwmRange);
+    static void softPwmWrite(int aPin, int aValue);
+    static void pwmSetClock(int aClock);
+    static void pwmSetRange(int aRange);
 
 };
 

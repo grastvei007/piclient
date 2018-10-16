@@ -55,16 +55,14 @@ void GpioPin::onPinModeChanged(int aMode)
     else if(aMode == 1)
     {
         mMode = eOut;
-#ifdef __arm__
-         pinMode(aPinNumber, OUTPUT);
-#endif
+        WiringPi::pinMode(mPin, WiringPi::eOutput);
     }
     else if(aMode == 2)
     {
         mMode = ePwm;
-#ifdef __arm__
-      softPwmCreate(aPinNumber, 0, 100);
-#endif
+
+      WiringPi::softPwmCreate(aPinNumber, 0, 100);
+
     }
     else
         mMode = eUnknown;
@@ -80,23 +78,19 @@ void GpioPin::onPinValueChanged(int aValue)
     case eOut:
     {
         {
-#ifdef __arm__
-      if(aValue == 0)
-          digitalWrite(aPinNumber,  LOW);
-       else if(aValue == 1)
-          digitalWrite(aPinNumber, HIGH);
 
-#endif
-        qDebug() << "out" << aValue;
+      if(aValue == 0)
+          WiringPi::digitalWrite(aPinNumber, WiringPi::eLow);
+       else if(aValue == 1)
+          WiringPi::digitalWrite(aPinNumber, WiringPi::eHigh);
+
         break;
         }
     }
     case ePwm:
     {
-#ifdef __arm__
         if(aValue >= 0 && aValue <= 100)
-            softPwmWrite(aPinNumber, aValue);
-#endif
+            WiringPi::softPwmWrite(aPinNumber, aValue);
         qDebug() << "pwm" << aValue;
         break;
     }
@@ -109,11 +103,11 @@ void GpioPin::onPinValueChanged(int aValue)
 
 void GpioPin::onPinPwmClockValueChanged(int aValue)
 {
-
+    WiringPi::pwmSetClock(aValue);
 }
 
 
 void GpioPin::onPinPwmRangeValueChanged(int aValue)
 {
-
+    WiringPi::pwmSetRange(aValue);
 }
