@@ -33,6 +33,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 LIBPATH = $$(DEV_LIBS)
 message(lib path: $$LIBPATH)
 
+
 if(debug){
 LIBS += -L$$LIBPATH -ltagsystemd
 
@@ -46,8 +47,10 @@ INCLUDEPATH += ../../tagsystem
 
 SOURCES += main.cpp \
     app.cpp \
-    gpiopin.cpp
+    gpiopin.cpp \
+    wiringpiwrapper.cpp
 
 HEADERS += \
     app.h \
-    gpiopin.h
+    gpiopin.h \
+    wiringpiwrapper.h

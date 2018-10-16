@@ -1,8 +1,5 @@
 #include "gpiopin.h"
-#ifdef __arm__
-#include <wiringPi.h>
-#include <softPwm.h>
-#endif
+#include "wiringpiwrapper.h"
 
 #include <QDebug>
 #include <QtGlobal>
@@ -37,10 +34,11 @@ GpioPin::GpioPin(int aPinNumber, QObject *parent) : QObject(parent),
     // set default as pin out and off
     mPinMode->writeValue(eOut);
     mPinValue->writeValue(0);
-#ifdef __arm__
-     pinMode(aPinNumber, OUTPUT);
-     digitalWrite(aPinNumber,  LOW);
-#endif
+
+
+     WiringPi::pinMode(aPinNumber, WiringPi::eOutput);
+     WiringPi::digitalWrite(aPinNumber,  WiringPi::eLow);
+
 
     connect(mPinMode, QOverload<int>::of(&TagSocket::valueChanged), this, &GpioPin::onPinModeChanged);
     connect(mPinValue, QOverload<int>::of(&TagSocket::valueChanged), this, &GpioPin::onPinValueChanged);

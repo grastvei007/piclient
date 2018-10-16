@@ -4,10 +4,8 @@
 #include <QStringList>
 #include <QDebug>
 
-#ifdef __arm__
-#include <wiringPi.h>
-#include <softPwm.h>
-#endif
+#include "wiringpiwrapper.h"
+
 #include <tagsystem/taglist.h>
 
 #include "gpiopin.h"
@@ -28,9 +26,8 @@ App::App(int argc, char *argv[]) : QCoreApplication(argc, argv)
     parser.addOption(ip);
 
     parser.process(*this);
-#ifdef __arm__
-    wiringPiSetup();
-#endif
+
+    WiringPi::wiringPiSetup();
 
     QString adress = parser.value(ip);
     TagList::sGetInstance().connectToServer(adress, 5000);
