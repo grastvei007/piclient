@@ -59,7 +59,7 @@ int WiringPi::softPwmCreate(int aPin, int aInitVal, int aPwmRange)
 void WiringPi::softPwmWrite(int aPin, int aValue)
 {
 #ifdef __arm__
-    softPwmWrite(aPinNumber, aValue);
+    softPwmWrite(aPin, aValue);
 #else
     qDebug() << __FUNCTION__;
 #endif
