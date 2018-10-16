@@ -45,6 +45,15 @@ LIBS += -L$$LIBPATH -ltagsystem
 INCLUDEPATH += ../../tagsystem
 
 
+linux {
+    contains(QMAKE_HOST.arch, arm.*):{
+        -lwiringPi
+
+    }else{
+        ...
+    }
+}
+
 SOURCES += main.cpp \
     app.cpp \
     gpiopin.cpp \

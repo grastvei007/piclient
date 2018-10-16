@@ -40,8 +40,8 @@ GpioPin::GpioPin(int aPinNumber, QObject *parent) : QObject(parent),
      WiringPi::digitalWrite(aPinNumber,  WiringPi::eLow);
 
 
-    connect(mPinMode, QOverload<int>::of(&TagSocket::valueChanged), this, &GpioPin::onPinModeChanged);
-    connect(mPinValue, QOverload<int>::of(&TagSocket::valueChanged), this, &GpioPin::onPinValueChanged);
+    connect(mPinMode, static_cast<void(TagSocket::*)(int)>(&TagSocket::valueChanged), this, &GpioPin::onPinModeChanged);
+    connect(mPinValue, static_cast<void(TagSocket::*)(int)>(&TagSocket::valueChanged), this, &GpioPin::onPinValueChanged);
 }
 
 void GpioPin::onPinModeChanged(int aMode)
