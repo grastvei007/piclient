@@ -61,7 +61,7 @@ void GpioPin::onPinModeChanged(int aMode)
     {
         mMode = ePwm;
 
-      WiringPi::softPwmCreate(aPinNumber, 0, 100);
+      WiringPi::softPwmCreate(mPin, 0, 100);
 
     }
     else
@@ -80,9 +80,9 @@ void GpioPin::onPinValueChanged(int aValue)
         {
 
       if(aValue == 0)
-          WiringPi::digitalWrite(aPinNumber, WiringPi::eLow);
+          WiringPi::digitalWrite(mPin, WiringPi::eLow);
        else if(aValue == 1)
-          WiringPi::digitalWrite(aPinNumber, WiringPi::eHigh);
+          WiringPi::digitalWrite(mPin, WiringPi::eHigh);
 
         break;
         }
@@ -90,7 +90,7 @@ void GpioPin::onPinValueChanged(int aValue)
     case ePwm:
     {
         if(aValue >= 0 && aValue <= 100)
-            WiringPi::softPwmWrite(aPinNumber, aValue);
+            WiringPi::softPwmWrite(mPin, aValue);
         qDebug() << "pwm" << aValue;
         break;
     }
