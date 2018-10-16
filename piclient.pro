@@ -1,5 +1,5 @@
 QT -= gui
-
+QT += widgets websockets xml
 CONFIG += c++11 console
 CONFIG -= app_bundle
 TEMPLATE = app
@@ -47,8 +47,8 @@ INCLUDEPATH += ../../tagsystem
 
 linux {
     contains(QMAKE_HOST.arch, arm.*):{
-        -lwiringPi
-
+       LIBS +=  -lwiringPi
+	message(rasberry pi)
     }else{
         ...
     }

@@ -12,7 +12,7 @@
 void WiringPi::wiringPiSetup()
 {
 #ifdef __arm__
-    wiringPiSetup();
+    ::wiringPiSetup();
 #else
     qDebug() << __FUNCTION__;
 #endif
@@ -22,9 +22,9 @@ void WiringPi::pinMode(int aPin, PinDir aDir)
 {
 #ifdef __arm__
     if(aDir == eInput)
-        pinMode(aPin, 0);
+        ::pinMode(aPin, 0);
     else if(aDir == eOutput)
-        pinMode(aPin, 1);
+        ::pinMode(aPin, 1);
 #else
     qDebug() << __FUNCTION__;
 #endif
@@ -36,9 +36,9 @@ void WiringPi::digitalWrite(int aPin, Value aVal)
 {
 #ifdef __arm__
     if(aVal == eLow)
-        digitalWrite(aPin, 0);
+        ::digitalWrite(aPin, 0);
     else if(aVal == eHigh)
-        digitalWrite(aPin, 1);
+        ::digitalWrite(aPin, 1);
 #else
     qDebug() << __FUNCTION__;
 #endif
@@ -48,7 +48,7 @@ void WiringPi::digitalWrite(int aPin, Value aVal)
 int WiringPi::softPwmCreate(int aPin, int aInitVal, int aPwmRange)
 {
 #ifdef __arm__
-      return softPwmCreate(aPin, aInitVal, aPwmRange);
+      return ::softPwmCreate(aPin, aInitVal, aPwmRange);
 #else
     qDebug() << __FUNCTION__;
     return 0;
@@ -59,7 +59,7 @@ int WiringPi::softPwmCreate(int aPin, int aInitVal, int aPwmRange)
 void WiringPi::softPwmWrite(int aPin, int aValue)
 {
 #ifdef __arm__
-    softPwmWrite(aPin, aValue);
+    ::softPwmWrite(aPin, aValue);
 #else
     qDebug() << __FUNCTION__;
 #endif
@@ -69,7 +69,7 @@ void WiringPi::softPwmWrite(int aPin, int aValue)
 void WiringPi::pwmSetClock(int aClock)
 {
 #ifdef __arm__
-    pwmSetClock(aClock);
+    ::pwmSetClock(aClock);
 #else
     qDebug() << __FUNCTION__;
 #endif
@@ -79,7 +79,7 @@ void WiringPi::pwmSetClock(int aClock)
 void WiringPi::pwmSetRange(int aRange)
 {
 #ifdef __arm__
-    pwmSetRange(aRange);
+    ::pwmSetRange(aRange);
 #else
     qDebug() << __FUNCTION__;
 #endif
