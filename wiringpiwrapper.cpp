@@ -22,9 +22,9 @@ void WiringPi::pinMode(int aPin, PinDir aDir)
 {
 #ifdef __arm__
     if(aDir == eInput)
-        pinMode(aPin, INPUT);
+        pinMode(aPin, 0);
     else if(aDir == eOutput)
-        pinMode(aPin, OUTPUT);
+        pinMode(aPin, 1);
 #else
     qDebug() << __FUNCTION__;
 #endif
@@ -36,9 +36,9 @@ void WiringPi::digitalWrite(int aPin, Value aVal)
 {
 #ifdef __arm__
     if(aVal == eLow)
-        digitalWrite(aPin, LOW);
+        digitalWrite(aPin, 0);
     else if(aVal == eHigh)
-        digitalWrite(aPin, HIGH);
+        digitalWrite(aPin, 1);
 #else
     qDebug() << __FUNCTION__;
 #endif
