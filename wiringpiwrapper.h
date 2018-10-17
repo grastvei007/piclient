@@ -22,6 +22,12 @@ public:
         eHigh
     };
 
+    enum PwmMode
+    {
+        ePwmModeMs,
+        ePwmModeBal
+    };
+
     static void wiringPiSetup();
     static void pinMode(int aPin, PinDir aDir);
     static void digitalWrite(int aPin, Value aVal);
@@ -29,6 +35,7 @@ public:
     static void softPwmWrite(int aPin, int aValue);
     static void pwmSetClock(int aClock);
     static void pwmSetRange(int aRange);
+    static void pwmSetMode(PwmMode aPwmMode);
 
 };
 

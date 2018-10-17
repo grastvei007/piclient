@@ -84,3 +84,13 @@ void WiringPi::pwmSetRange(int aRange)
     qDebug() << __FUNCTION__;
 #endif
 }
+
+
+void WiringPi::pwmSetMode(PwmMode aPwmMode)
+{
+#ifdef __arm__
+    ::pwmSetMode(aPwmMode == ePwmModeMs ? 0 : 1);
+#else
+    qDebug() << __FUNCTION__;
+#endif
+}

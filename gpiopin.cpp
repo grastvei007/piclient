@@ -61,6 +61,7 @@ void GpioPin::onPinModeChanged(int aMode)
     {
         mMode = ePwm;
 
+      WiringPi::pwmSetMode(WiringPi::ePwmModeMs);
       WiringPi::softPwmCreate(mPin, 0, 100);
 
     }
