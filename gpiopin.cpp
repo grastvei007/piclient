@@ -13,10 +13,10 @@ GpioPin::GpioPin(int aPinNumber, QObject *parent) : QObject(parent),
     mMode(eUnknown),
     mPin(aPinNumber)
 {
-    mPinMode = new TagSocket("gpio", QString("pin%1Mode").arg(aPinNumber), TagSocket::eInt);
+    mPinMode = TagSocket::createTagSocket("gpio", QString("pin%1Mode").arg(aPinNumber), TagSocket::eInt);
     mPinMode->hookupTag("pi", QString("gpioPin%1Mode").arg(aPinNumber));
 
-    mPinValue = new TagSocket("gpio", QString("pin%1Value").arg(aPinNumber), TagSocket::eInt);
+    mPinValue = TagSocket::createTagSocket("gpio", QString("pin%1Value").arg(aPinNumber), TagSocket::eInt);
     mPinValue->hookupTag("pi", QString("gpioPin%1Value").arg(aPinNumber));
 
     Tag *pwmClock = TagList::sGetInstance().createTag("pi", QString("gpioPin%1PwmClock").arg(aPinNumber), Tag::eInt);
@@ -25,10 +25,10 @@ GpioPin::GpioPin(int aPinNumber, QObject *parent) : QObject(parent),
     pwmClock->setValue(-1);
     pwmRange->setValue(-1);
 
-    mPwmClockTagSocket = new TagSocket("gpio", QString("pin%1PwmClock").arg(aPinNumber), TagSocket::eInt);
+    mPwmClockTagSocket = TagSocket::createTagSocket("gpio", QString("pin%1PwmClock").arg(aPinNumber), TagSocket::eInt);
     mPwmClockTagSocket->hookupTag(pwmClock);
 
-    mPwmRangeTagSocket = new TagSocket("gpio", QString("pin%1PwmRange").arg(aPinNumber), TagSocket::eInt);
+    mPwmRangeTagSocket = TagSocket::createTagSocket("gpio", QString("pin%1PwmRange").arg(aPinNumber), TagSocket::eInt);
     mPwmRangeTagSocket->hookupTag(pwmRange);
 
     // set default as pin out and off

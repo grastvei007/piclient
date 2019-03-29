@@ -42,7 +42,7 @@ else{
 LIBS += -L$$LIBPATH -ltagsystem
 }
 
-INCLUDEPATH += ../../tagsystem
+INCLUDEPATH += ../
 
 
 linux {
