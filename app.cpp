@@ -27,10 +27,12 @@ App::App(int argc, char *argv[]) : QCoreApplication(argc, argv)
 
     parser.process(*this);
 
-    WiringPi::wiringPiSetup();
+     WiringPi::wiringPiSetup();
 
     QString adress = parser.value(ip);
-    TagList::sGetInstance().connectToServer(adress, 5000);
+    TagList::sGetInstance().setClientName("piclient");
+    TagList::sGetInstance().connectToServer(adress, 5000);git@github.com:grastvei007/piclient.git
+    TagList::sGetInstance().setAutoconnectOnBroadcast(true);
 
 
     TagList::sGetInstance().createTag("pi", "gpioPin0Mode", Tag::eInt);
