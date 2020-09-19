@@ -1,6 +1,6 @@
 QT -= gui
 QT += widgets websockets xml
-CONFIG += c++14 console
+CONFIG += c++19 console
 CONFIG -= app_bundle
 TEMPLATE = app
 
@@ -56,6 +56,9 @@ linux {
 
 SOURCES += main.cpp \
     app.cpp \
+    functions/heatereffect.cpp \
+    functions/heaterfan.cpp \
+    functions/heaterpreheat.cpp \
     functions/heaterpump.cpp \
     gpiopinfactory.cpp \
     wiringpiwrapper.cpp
@@ -64,6 +67,9 @@ HEADERS += \
     app.h \
     factory.h \
     factorybase.h \
+    functions/heatereffect.h \
+    functions/heaterfan.h \
+    functions/heaterpreheat.h \
     functions/heaterpump.h \
     gpiopinfactory.h \
     wiringpiwrapper.h
