@@ -17,6 +17,10 @@ signals:
 public slots:
 
 private:
+    void setupGpioFromSettingsFile();
+    void writeDefaultSettings();
+
+private:
     QVector<GpioPin*> mGpioPins;
 };
 

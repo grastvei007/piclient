@@ -1,6 +1,6 @@
 QT -= gui
 QT += widgets websockets xml
-CONFIG += c++11 console
+CONFIG += c++14 console
 CONFIG -= app_bundle
 TEMPLATE = app
 
@@ -42,7 +42,7 @@ else{
 LIBS += -L$$LIBPATH -ltagsystem
 }
 
-INCLUDEPATH += ../
+INCLUDEPATH += $$(JUNE_ROOT)
 
 
 linux {
@@ -56,10 +56,16 @@ linux {
 
 SOURCES += main.cpp \
     app.cpp \
+    gpioout.cpp \
     gpiopin.cpp \
+    gpiopinfactory.cpp \
     wiringpiwrapper.cpp
 
 HEADERS += \
     app.h \
+    factory.h \
+    factorybase.h \
+    gpioout.h \
     gpiopin.h \
+    gpiopinfactory.h \
     wiringpiwrapper.h

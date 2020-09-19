@@ -2,9 +2,12 @@
 
 #include <QCommandLineParser>
 #include <QStringList>
+#include <QDir>
 #include <QDebug>
+#include <QXmlStreamWriter>
 
 #include "wiringpiwrapper.h"
+#include "gpiopinfactory.h"
 
 #include <tagsystem/taglist.h>
 
@@ -20,42 +23,101 @@ App::App(int argc, char *argv[]) : QCoreApplication(argc, argv)
     parser.addVersionOption();
     parser.addHelpOption();
 
-    QCommandLineOption ip(QStringList() << "a" << "server_adress", "Server Adress");
-    ip.setValueName("adress");
-    ip.setDefaultValue("localhost");
-    parser.addOption(ip);
+    QCommandLineOption serverIp("ip", "server-ip", "Connect to server");
+    serverIp.setDefaultValue("localhost");
+    parser.addOption(serverIp);
 
     parser.process(*this);
+    GpioPinFactory::createFactory();
 
-     WiringPi::wiringPiSetup();
+    WiringPi::wiringPiSetup();
 
-    QString adress = parser.value(ip);
     TagList::sGetInstance().setClientName("piclient");
-    TagList::sGetInstance().connectToServer(adress, 5000);git@github.com:grastvei007/piclient.git
-    TagList::sGetInstance().setAutoconnectOnBroadcast(true);
+    TagList::sGetInstance().connectToServer(parser.value(serverIp), 5000);
 
+    setupGpioFromSettingsFile();
+}
 
-    TagList::sGetInstance().createTag("pi", "gpioPin0Mode", Tag::eInt);
-    TagList::sGetInstance().createTag("pi", "gpioPin1Mode", Tag::eInt);
-    TagList::sGetInstance().createTag("pi", "gpioPin2Mode", Tag::eInt);
-    TagList::sGetInstance().createTag("pi", "gpioPin3Mode", Tag::eInt);
-    TagList::sGetInstance().createTag("pi", "gpioPin4Mode", Tag::eInt);
-    TagList::sGetInstance().createTag("pi", "gpioPin5Mode", Tag::eInt);
-    TagList::sGetInstance().createTag("pi", "gpioPin6Mode", Tag::eInt);
-    TagList::sGetInstance().createTag("pi", "gpioPin7Mode", Tag::eInt);
+void App::setupGpioFromSettingsFile()
+{
+    QString path = QDir::homePath() + QDir::separator() + ".config" + QDir::separator() + "june";
+    QDir dir(path);
+    if(!dir.exists())
+        QDir().mkpath(path);
+    path.append(QDir::separator());
+    path.append("rpigpiosetup.xml");
+    QFile file(path);
+    if(!file.exists())
+    {
+        writeDefaultSettings();
+        setupGpioFromSettingsFile();
+        return;
+    }
+    if(!file.open(QIODevice::ReadOnly))
+    {
+        qDebug() << __FUNCTION__ << "Error opening file, " << path;
+        return;
+    }
+    QXmlStreamReader stream(&file);
 
-    TagList::sGetInstance().createTag("pi", "gpioPin0Value", Tag::eInt);
-    TagList::sGetInstance().createTag("pi", "gpioPin1Value", Tag::eInt);
-    TagList::sGetInstance().createTag("pi", "gpioPin2Value", Tag::eInt);
-    TagList::sGetInstance().createTag("pi", "gpioPin3Value", Tag::eInt);
-    TagList::sGetInstance().createTag("pi", "gpioPin4Value", Tag::eInt);
-    TagList::sGetInstance().createTag("pi", "gpioPin5Value", Tag::eInt);
-    TagList::sGetInstance().createTag("pi", "gpioPin6Value", Tag::eInt);
-    TagList::sGetInstance().createTag("pi", "gpioPin7Value", Tag::eInt);
+    while(!stream.atEnd() && !stream.hasError())
+    {
+        QXmlStreamReader::TokenType token = stream.readNext();
+        if(token == QXmlStreamReader::StartDocument)
+            continue;
+        if(token == QXmlStreamReader::StartElement)
+        {
+            if(stream.name() == "rpi")
+                continue;
+            if(stream.name() == "gpio")
+            {
+                QString pin = stream.attributes().value("pin").toString();
+                QString mode = stream.attributes().value("mode").toString();
+                QString name = QString("pin_%1").arg(pin);
+                if(mode.toInt() == 1)
+                    name.append("_out");
+                else if(mode.toInt() == 2)
+                    name.append("_pwm");
+
+                int value = stream.attributes().value("value").toInt();
+            }
+        }
+    }
+
+    file.close();
+}
+
+void App::writeDefaultSettings()
+{
+    QString path = QDir::homePath() + QDir::separator() + ".config" + QDir::separator() + "june";
+    QDir dir(path);
+    if(!dir.exists())
+        QDir().mkpath(path);
+    path.append(QDir::separator());
+    path.append("rpigpiosetup.xml");
+    QFile file(path);
+    if(!file.open(QIODevice::WriteOnly))
+    {
+        qDebug() << __FUNCTION__ << "Error opening file, " << path;
+        return;
+    }
+
+    QXmlStreamWriter stream(&file);
+    stream.setAutoFormatting(true);
+    stream.writeStartDocument();
+    stream.writeStartElement("rpi");
 
     for(int i=0; i<8; ++i)
     {
-        GpioPin *pin = new GpioPin(i);
-        mGpioPins.push_back(pin);
+        stream.writeStartElement("gpio");
+        stream.writeAttribute("pin", QString("%1").arg(i));
+        stream.writeAttribute("mode", "1"); //out
+        stream.writeAttribute("value", "0"); // off
+        stream.writeEndElement();
     }
+
+    stream.writeEndElement();
+    stream.writeEndDocument();
+
+    file.close();
 }
