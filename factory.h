@@ -4,13 +4,19 @@
 #include <map>
 #include <string>
 #include <iostream>
+#include <QString>
+
+#include <tagsystem/tagsocket.h>
 
 //#include "factorybase.h"
 
 class FactoryBase;
 
 template<typename Type>
-FactoryBase* createType() { return new Type; }
+FactoryBase* createType(QString aTagSystem, QString aName, TagSocket::Type aType)
+{
+    return new Type(aTagSystem, aName, aType);
+}
 
 class Factory
 {
@@ -21,12 +27,12 @@ public:
         return sFactory;
     }
 
-    FactoryBase* createInstance(const std::string &aKey)
+    FactoryBase* createInstance(const std::string &aKey, const QString &aTagSystem, const QString &aName, TagSocket::Type aType)
     {
         if(mConstructors.find(aKey) == mConstructors.end())
             return nullptr;
         Creator createor = mConstructors[aKey];
-        return createor();
+        return createor(aTagSystem, aName, aType);
     }
 
 
@@ -37,7 +43,7 @@ private:
      Factory(){}
 
 protected:
-    typedef FactoryBase* (*Creator)();
+    typedef FactoryBase* (*Creator)(QString aTagSystem, QString aName, TagSocket::Type aType);
 
     std::map<std::string, Creator> mConstructors;
 };

@@ -4,30 +4,43 @@
 #include <string>
 
 #include <QObject>
+#include <QDebug>
 
-class Device;
+#include <tagsystem/taglist.h>
+#include <tagsystem/tagsocket.h>
+#include <tagsystem/tag.h>
 
 class FactoryBase : public QObject
 {
     Q_OBJECT
 public:
-    FactoryBase(){mDevice = nullptr;}
-    virtual ~FactoryBase(){;}
-
-    void setDevice(Device *aDevice)
-    {
-        mDevice = aDevice;
-        emit deviceSet();
+    FactoryBase(const QString &aTagSystem, const QString &aName, TagSocket::Type aType){
+        mTagSocket = TagSocket::createTagSocket(aTagSystem, aName, aType);
+        connect(mTagSocket, qOverload<TagSocket*>(&TagSocket::valueChanged), this, &FactoryBase::onTagSocketValueChanged);
     }
-    Device *getDevice() const {return  mDevice;}
+    virtual ~FactoryBase(){
 
-signals:
-    void deviceSet();
+    }
+
+    void hookupTag(Tag *aTag){
+        if(mTagSocket && aTag)
+            mTagSocket->hookupTag(aTag);
+    }
+
+    void hookupTag(const QString &aSubsystem, const QString &aName){
+        if(mTagSocket)
+            mTagSocket->hookupTag(aSubsystem, aName);
+    }
+
+protected:
+    virtual void onTagSocketValueChanged(TagSocket *aTagSocket){
+        Q_UNUSED(aTagSocket);
+        qDebug() << __FUNCTION__ << "Override this function";
+    }
 
 private:
-    Device *mDevice;
+    TagSocket *mTagSocket;
+
 };
-
-
 
 #endif // FACTORYBASE_H

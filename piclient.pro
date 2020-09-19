@@ -56,8 +56,7 @@ linux {
 
 SOURCES += main.cpp \
     app.cpp \
-    gpioout.cpp \
-    gpiopin.cpp \
+    functions/heaterpump.cpp \
     gpiopinfactory.cpp \
     wiringpiwrapper.cpp
 
@@ -65,7 +64,6 @@ HEADERS += \
     app.h \
     factory.h \
     factorybase.h \
-    gpioout.h \
-    gpiopin.h \
+    functions/heaterpump.h \
     gpiopinfactory.h \
     wiringpiwrapper.h

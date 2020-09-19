@@ -10,8 +10,8 @@
 #include "gpiopinfactory.h"
 
 #include <tagsystem/taglist.h>
+#include <tagsystem/tag.h>
 
-#include "gpiopin.h"
 
 App::App(int argc, char *argv[]) : QCoreApplication(argc, argv)
 {
@@ -69,18 +69,12 @@ void App::setupGpioFromSettingsFile()
         {
             if(stream.name() == "rpi")
                 continue;
-            if(stream.name() == "gpio")
-            {
-                QString pin = stream.attributes().value("pin").toString();
-                QString mode = stream.attributes().value("mode").toString();
-                QString name = QString("pin_%1").arg(pin);
-                if(mode.toInt() == 1)
-                    name.append("_out");
-                else if(mode.toInt() == 2)
-                    name.append("_pwm");
 
-                int value = stream.attributes().value("value").toInt();
-            }
+            QString tagsystem = stream.name().toString()         ;
+            QString name = stream.attributes().value("name").toString();
+            QString type = stream.attributes().value("type").toString();
+            int value = stream.attributes().value("value").toInt();
+
         }
     }
 
@@ -110,9 +104,12 @@ void App::writeDefaultSettings()
     for(int i=0; i<8; ++i)
     {
         stream.writeStartElement("gpio");
-        stream.writeAttribute("pin", QString("%1").arg(i));
-        stream.writeAttribute("mode", "1"); //out
+        stream.writeAttribute("name", QString("pin_%1").arg(i));
+        stream.writeAttribute("type", "out"); //out
         stream.writeAttribute("value", "0"); // off
+        stream.writeAttribute("tagsubsystem", "subsytem");
+        stream.writeAttribute("tagname", "tagname");
+        stream.writeAttribute("tagtype", Tag::toString(Tag::eInt));
         stream.writeEndElement();
     }
 

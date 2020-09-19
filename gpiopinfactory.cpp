@@ -2,9 +2,9 @@
 
 #include "factory.h"
 
-#include "gpioout.h"
+#include "functions/heaterpump.h"
 
 void GpioPinFactory::createFactory()
 {
-    Factory::sGetFactory().addFactory<GpioOut>("pinout");
+    Factory::sGetFactory().addFactory<HeaterPump>("heaterpump");
 }
