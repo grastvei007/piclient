@@ -2,10 +2,11 @@
 #include "wiringpiwrapper.h"
 
 #include <QTimer>
+#include <QDebug>
 
 HeaterPump::HeaterPump(const QString &aTagSystem, const QString &aName, TagSocket::Type aType) : FactoryBase(aTagSystem, aName, aType)
 {
-
+    qDebug() << __FUNCTION__;
 }
 
 HeaterPump::~HeaterPump()
@@ -17,8 +18,10 @@ HeaterPump::~HeaterPump()
 void HeaterPump::onTagSocketValueChanged(TagSocket *aTagSocket)
 {
     int value = 0;
-    if(!aTagSocket && !aTagSocket->readValue(value))
+    if(!aTagSocket)
         return;
+     if(!aTagSocket->readValue(value))
+         return;
     if(value < mMinValue)
         value = mMinValue;
     if(value > mMaxValue)
@@ -31,7 +34,9 @@ void HeaterPump::onTagSocketValueChanged(TagSocket *aTagSocket)
         connect(mPumpTimer, &QTimer::timeout, this, &HeaterPump::onPumpTimerTimeout);
     }
     mPumpTimer->stop();
-    mPumpTimer->setInterval(mCurrentPumpSpeed);
+    if(value == 0)
+        return;
+    mPumpTimer->setInterval(1000*mCurrentPumpSpeed);
     mPumpTimer->start();
 }
 

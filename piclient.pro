@@ -61,6 +61,7 @@ SOURCES += main.cpp \
     functions/heaterpreheat.cpp \
     functions/heaterpump.cpp \
     gpiopinfactory.cpp \
+    heater.cpp \
     wiringpiwrapper.cpp
 
 HEADERS += \
@@ -72,4 +73,5 @@ HEADERS += \
     functions/heaterpreheat.h \
     functions/heaterpump.h \
     gpiopinfactory.h \
+    heater.h \
     wiringpiwrapper.h

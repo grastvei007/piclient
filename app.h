@@ -1,10 +1,14 @@
 #ifndef APP_H
 #define APP_H
 
+#include <memory>
+
 #include <QCoreApplication>
 #include <QVector>
 
-class GpioPin;
+#include "heater.h"
+
+class FactoryBase;
 
 class App : public QCoreApplication
 {
@@ -21,7 +25,8 @@ private:
     void writeDefaultSettings();
 
 private:
-    QVector<GpioPin*> mGpioPins;
+    QVector<FactoryBase*> mGpioPins;
+    std::unique_ptr<Heater> mHeater;
 };
 
 #endif // APP_H

@@ -8,9 +8,13 @@
 
 #include "wiringpiwrapper.h"
 #include "gpiopinfactory.h"
+#include "factory.h"
+#include "factorybase.h"
 
 #include <tagsystem/taglist.h>
 #include <tagsystem/tag.h>
+#include <tagsystem/tagsocket.h>
+#include <tagsystem/tagsocketlist.h>
 
 
 App::App(int argc, char *argv[]) : QCoreApplication(argc, argv)
@@ -32,10 +36,14 @@ App::App(int argc, char *argv[]) : QCoreApplication(argc, argv)
 
     WiringPi::wiringPiSetup();
 
+    TagSocketList::sGetInstance().loadBindingList();
+
     TagList::sGetInstance().setClientName("piclient");
     TagList::sGetInstance().connectToServer(parser.value(serverIp), 5000);
 
     setupGpioFromSettingsFile();
+
+    mHeater = std::make_unique<Heater>();
 }
 
 void App::setupGpioFromSettingsFile()
@@ -70,11 +78,29 @@ void App::setupGpioFromSettingsFile()
             if(stream.name() == "rpi")
                 continue;
 
-            QString tagsystem = stream.name().toString()         ;
-            QString name = stream.attributes().value("name").toString();
-            QString type = stream.attributes().value("type").toString();
+            QString tagSocketSubsystem = stream.name().toString();
+            QString tagSocketName = stream.attributes().value("name").toString();
+            TagSocket::Type tagSocketType = TagSocket::typeFromString(stream.attributes().value("tagtype").toString());
+            QString functionType = stream.attributes().value("type").toString();
+
+            QString tagSubsystem = stream.attributes().value("tagsubsystem").toString();
+            QString tagName = stream.attributes().value("tagname").toString();
+            Tag::Type tagType = Tag::typeFromString(stream.attributes().value("tagtype").toString());
+
             int value = stream.attributes().value("value").toInt();
 
+            FactoryBase *function = Factory::sGetFactory().createInstance(functionType.toStdString(), tagSocketSubsystem, tagSocketName, tagSocketType);
+            if(function)
+            {
+                Tag *tag = TagList::sGetInstance().createTag(tagSubsystem, tagName, tagType);
+                if(tag)
+                {
+                    tag->setValue(value);
+                    function->hookupTag(tag);
+                }
+
+                mGpioPins.push_back(function);
+            }
         }
     }
 
