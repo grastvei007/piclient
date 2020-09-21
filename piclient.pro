@@ -56,6 +56,7 @@ linux {
 
 SOURCES += main.cpp \
     app.cpp \
+    functions/gpioout.cpp \
     functions/heatereffect.cpp \
     functions/heaterfan.cpp \
     functions/heaterpreheat.cpp \
@@ -68,6 +69,7 @@ HEADERS += \
     app.h \
     factory.h \
     factorybase.h \
+    functions/gpioout.h \
     functions/heatereffect.h \
     functions/heaterfan.h \
     functions/heaterpreheat.h \

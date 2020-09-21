@@ -4,7 +4,7 @@
 
 HeaterPreHeat::HeaterPreHeat(QString &aTagSystem, const QString &aName, TagSocket::Type aType) : FactoryBase(aTagSystem, aName, aType)
 {
-
+    WiringPi::pinMode(mWireingPiPin, WiringPi::eOutput);
 }
 
 void HeaterPreHeat::onTagSocketValueChanged(TagSocket *aTagSocket)

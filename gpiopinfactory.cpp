@@ -6,6 +6,7 @@
 #include "functions/heaterpreheat.h"
 #include "functions/heatereffect.h"
 #include "functions/heaterfan.h"
+#include "functions/gpioout.h"
 
 void GpioPinFactory::createFactory()
 {
@@ -13,4 +14,5 @@ void GpioPinFactory::createFactory()
     Factory::sGetFactory().addFactory<HeaterPreHeat>("heaterpreheat");
     Factory::sGetFactory().addFactory<HeaterEffect>("heatereffect");
     Factory::sGetFactory().addFactory<HeaterFan>("heaterfan");
+    Factory::sGetFactory().addFactory<GpioOut>("out");
 }

@@ -7,6 +7,7 @@
 HeaterPump::HeaterPump(const QString &aTagSystem, const QString &aName, TagSocket::Type aType) : FactoryBase(aTagSystem, aName, aType)
 {
     qDebug() << __FUNCTION__;
+    WiringPi::pinMode(mWireingPiPin, WiringPi::eOutput);
 }
 
 HeaterPump::~HeaterPump()

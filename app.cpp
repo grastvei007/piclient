@@ -36,6 +36,7 @@ App::App(int argc, char *argv[]) : QCoreApplication(argc, argv)
 
     WiringPi::wiringPiSetup();
 
+    TagSocketList::sGetInstance().setApplicationName("piclient");
     TagSocketList::sGetInstance().loadBindingList();
 
     TagList::sGetInstance().setClientName("piclient");
@@ -130,12 +131,12 @@ void App::writeDefaultSettings()
     for(int i=0; i<8; ++i)
     {
         stream.writeStartElement("gpio");
-        stream.writeAttribute("name", QString("pin_%1").arg(i));
+        stream.writeAttribute("name", QString("pin_%1").arg(i+1));
         stream.writeAttribute("type", "out"); //out
         stream.writeAttribute("value", "0"); // off
         stream.writeAttribute("tagsubsystem", "subsytem");
         stream.writeAttribute("tagname", "tagname");
-        stream.writeAttribute("tagtype", Tag::toString(Tag::eInt));
+        stream.writeAttribute("tagtype", Tag::toString(Tag::eBool));
         stream.writeEndElement();
     }
 
