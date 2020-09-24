@@ -10,7 +10,9 @@ HeaterFan::HeaterFan(QString &aTagSystem, const QString &aName, TagSocket::Type 
 void HeaterFan::onTagSocketValueChanged(TagSocket *aTagSocket)
 {
     int value = 0;
-    if(!aTagSocket && !aTagSocket->readValue(value))
+    if(!aTagSocket)
+        return;
+     if(!aTagSocket->readValue(value))
         return;
 
     if(value < 0)
