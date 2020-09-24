@@ -10,7 +10,9 @@ HeaterPreHeat::HeaterPreHeat(QString &aTagSystem, const QString &aName, TagSocke
 void HeaterPreHeat::onTagSocketValueChanged(TagSocket *aTagSocket)
 {
     bool value = false;
-    if(!aTagSocket && !aTagSocket->readValue(value))
+    if(!aTagSocket)
+		return;
+ 	if(!aTagSocket->readValue(value))
         return;
 
     if(value)

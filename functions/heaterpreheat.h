@@ -16,7 +16,7 @@ protected:
     void onTagSocketValueChanged(TagSocket *aTagSocket);
 
 private:
-    int mWireingPiPin = 2;
+    int mWireingPiPin = 0;
 };
 
 #endif // HEATERPREHEAT_H
